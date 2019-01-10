@@ -109,7 +109,7 @@ public class RequestHandler extends Thread {
 		byte[] body = Files.readAllBytes(file.toPath());
 		String contentType = Files.probeContentType(file.toPath());
 		//응답
-		outputStream.write( "HTTP/1.1 200 OK\r\n".getBytes( "UTF-8" ) );
+		outputStream.write((protocol + " 200 OK\r\n").getBytes( "UTF-8" ) );
 		outputStream.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
 		outputStream.write( "\r\n".getBytes() );
 		outputStream.write(body);
@@ -130,7 +130,7 @@ public class RequestHandler extends Thread {
 			byte[] body = Files.readAllBytes(file.toPath());
 			String contentType = Files.probeContentType(file.toPath());
 			//응답
-			outputStream.write( "HTTP/1.0 404 File Not Found\r\n".getBytes( "UTF-8" ) );
+			outputStream.write((protocol + " 404 File Not Found\r\n").getBytes( "UTF-8" ) );
 			outputStream.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
 			outputStream.write( "\r\n".getBytes() );
 			outputStream.write(body);
@@ -149,7 +149,7 @@ public class RequestHandler extends Thread {
 			byte[] body = Files.readAllBytes(file.toPath());
 			String contentType = Files.probeContentType(file.toPath());
 			//응답
-			outputStream.write( "HTTP/1.0 400 Bad Request\r\n".getBytes( "UTF-8" ) );
+			outputStream.write((protocol + " 400 Bad Request\r\n").getBytes( "UTF-8" ) );
 			outputStream.write( ("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ) );
 			outputStream.write( "\r\n".getBytes() );
 			outputStream.write(body);
