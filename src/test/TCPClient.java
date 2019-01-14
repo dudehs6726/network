@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketImpl;
+import java.net.SocketTimeoutException;
 
 public class TCPClient {
 	private static final String SERVER_IP = "218.39.221.75";
@@ -16,6 +18,23 @@ public class TCPClient {
 		try {
 			//1. 소켓 생성
 			socket = new Socket();
+			
+			//1-1 소켓 버퍼 용량 확인
+			int receiveBufferSize = socket.getReceiveBufferSize();
+			int sendBufferSize = socket.getSendBufferSize();
+			
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
+			//-2 소켓 버퍼 용량 변경
+			socket.setReceiveBufferSize(1024 * 10);
+			socket.setSendBufferSize(1024 * 10);
+			System.out.println(receiveBufferSize + " : " + sendBufferSize);
+			
+			//1-3. so_nodelay
+			socket.setTcpNoDelay(true);
+			
+			//1-4 so_timeout
+			socket.setSoTimeout(1);
 			
 			//2. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP, 0));
@@ -39,7 +58,9 @@ public class TCPClient {
 			
 			data = new String(buffer, 0, readByteCount, "UTF-8");
 			System.out.println("[client] received:" + data);
-		} catch (IOException e) {
+		}catch (SocketTimeoutException e) {
+			System.out.println("[client] Time Out");
+		}catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			if(socket != null && socket.isClosed() == false) {

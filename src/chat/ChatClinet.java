@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
+import chat.client.win.ChatWindow;
 import echo.EchoServer;
 
 public class ChatClinet {
@@ -40,8 +41,13 @@ public class ChatClinet {
 			pw.println("join:" + nickname);
 			pw.flush();
 			
+			/* UI                                                                                */
+			ChatWindow cw = new ChatWindow(nickname, pw);
+			new ChatClientThread(cw, br).start();
+			/*  */
+			
 			//6.ChatClientReceiveThread 시작
-			new ChatClientThread(br).start();
+			//new ChatClientThread(br).start();
 			
 			//7.키보드 입력 처리
 			while(true) {
